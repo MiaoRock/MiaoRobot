@@ -22,7 +22,7 @@ public class QingyunkeClient extends DefaultMiaoClient {
     private static final String url = "http://api.qingyunke.com/api.php";
     private final String key = "free";
     private final String appid = "0";
-    private final RobotMode mode = RobotMode.tuling;
+    private final RobotMode mode = RobotMode.qingyunke;
 
     public QingyunkeClient() {
         super(url);
@@ -33,15 +33,13 @@ public class QingyunkeClient extends DefaultMiaoClient {
         QingyunkeResponse qingyunkeResponse = this.execute(qingyunkeRequest);
         String qingyunkeResString = qingyunkeResponse.getContent();
         log.info("Client[" + mode + "]Req[" + text + "]Res[" + qingyunkeResString + "]");
-        String resp = qingyunkeResString.replace("菲菲", "小喵");
-        return resp;
+        return qingyunkeResString.replace("菲菲", "小喵");
     }
 
     private <T extends MiaoResponse> T _execute(MiaoRequest<T> request) throws MiaoException {
         String responseString = HttpUtils.doGet(url, request.getParams());
         log.info(responseString);
-        T tRsp = JSONObject.parseObject(responseString, request.getResponseClass());
-        return tRsp;
+        return JSONObject.parseObject(responseString, request.getResponseClass());
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.miao.robot.Enum;
 public enum RobotMode {
     normal("normal", "常规", ""),
     qingyunke("qingyunke", "青云客机器人", "QingyunkeClient"),
-    tuling("tuling", "青云客机器人", "TulingClient");
+    tuling("tuling", "图灵机器人", "TulingClient");
 
     RobotMode(String mode, String modeName, String modeClassName) {
         this.mode = mode;
