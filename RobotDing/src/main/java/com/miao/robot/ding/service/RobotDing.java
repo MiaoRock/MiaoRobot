@@ -20,6 +20,7 @@ public class RobotDing {
     private CheckDing checkDing;
     @Autowired
     private TulingClient tulingClient;
+
     @Autowired
     private QingyunkeClient qingyunkeClient;
 

@@ -1,0 +1,38 @@
+#server
+server:
+#  address: 127.0.0.1
+  port: 3900
+spring:
+  application:
+    name: wechat
+  datasource:
+    jdbc-url: jdbc:mysql://127.0.0.1:3306/dingmiao?useUnicode=true&characterEncoding=utf8
+    username: miao
+    password: miaomiao
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+      auto-commit: true
+#ding
+wechat:
+  check:
+    secret:
+#eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1900/eureka/
+#log
+logging:
+  level:
+    root: INFO
+    com.miao.robot: DEBUG
+    org.springframework.web: ERROR
+  file:
+    name: ./logs/Wechat.log
+  pattern:
+    console: "[%d{yyyy/MM/dd-HH:mm:ss.SSS}][%-5p]%m[%c.%M:%L]%n"
+    file: "[%d{yyyy/MM/dd-HH:mm:ss.SSS}][%-5p]%m[%c.%M:%L]%n"
+

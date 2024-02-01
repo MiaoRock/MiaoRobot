@@ -1,10 +1,9 @@
 package com.miao.robot.ding.request;
 
 import com.miao.robot.ding.response.DingResponse;
-import com.miao.robot.request.MiaoRequest;
 import com.miao.robot.lang.MiaoObject;
+import com.miao.robot.request.MiaoRequest;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.ArrayList;
 
