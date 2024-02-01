@@ -1,14 +1,15 @@
 #server
 server:
 #  address: 127.0.0.1
+  address: 192.168.20.64
   port: 4900
 spring:
   application:
     name: ding
   datasource:
-    jdbc-url: jdbc:mysql://127.0.0.1/dingmiao?useUnicode=true&characterEncoding=utf8
+    jdbc-url: jdbc:mysql://rockmiao.mysql.rds.aliyuncs.com:3306/dingmiao?useUnicode=true&characterEncoding=utf8
     username: miao
-    password: miao
+    password: Miaomiao8023
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -18,7 +19,7 @@ spring:
 #ding
 ding:
   check:
-    secret: XXX
+    secret: olQPKLwtpR8dvPMRe0gEsy-YzZX9QOb-dvSNs0kPeM2sdEV7PtdnoEfHx7-KpEGs
 #eureka
 eureka:
   client:

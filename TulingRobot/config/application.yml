@@ -8,8 +8,8 @@ spring:
 #tuling
 tuling:
   url: http://openapi.tuling123.com/openapi/api/v2
-  apkKey: XXX
-  userId: XXX
+  apkKey: 1042551aec434bdc8d409ff30b5e8637
+  userId: 640596
 #eureka
 eureka:
   client:
