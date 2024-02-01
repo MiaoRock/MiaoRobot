@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class RequestHeaderAndBodyResolver extends RequestResponseBodyMethodProcessor {
 
-    public  static final String headerMapName = "headerMap";
+    public static final String headerMapName = "headerMap";
 
     public RequestHeaderAndBodyResolver(List<HttpMessageConverter<?>> converters) {
         super(converters);

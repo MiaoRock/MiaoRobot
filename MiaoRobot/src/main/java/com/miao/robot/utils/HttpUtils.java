@@ -1,6 +1,10 @@
 package com.miao.robot.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.miao.robot.Exception.MiaoException;
+import com.miao.robot.request.MiaoRequest;
+import com.miao.robot.response.MiaoResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -15,13 +19,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
+@Slf4j
 public class HttpUtils {
 
     /**
      * 无参的get请求
      */
     public static String doGet(String url) throws MiaoException {
-        return doGet(url, null);
+        return doGet(url, (Map<String, String>) null);
     }
 
     /**
@@ -31,12 +36,21 @@ public class HttpUtils {
         return _doGet(url, params);
     }
 
+    /**
+     * 有参的get请求-req形式
+     */
+    public static <T extends MiaoResponse> T doGet(String url, MiaoRequest<T> request) throws MiaoException {
+        String responseString = _doGet(url, request.getParams());
+        log.info(responseString);
+        return JSONObject.parseObject(responseString, request.getResponseClass());
+    }
+
     private static String _doGet(String url, Map<String, String> params) throws MiaoException {
 
         // 创建Httpclient对象
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
-        String resultString = "";
+        String resultJson = "";
         CloseableHttpResponse response = null;
         try {
             // 创建uri
@@ -56,9 +70,10 @@ public class HttpUtils {
             response = httpclient.execute(httpGet);
             // 判断返回状态是否为200
 
-//            if (response.getStatusLine().getStatusCode() == 200) {
             if (response.getCode() == 200) {
-                resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
+                resultJson = EntityUtils.toString(response.getEntity(), "UTF-8");
+            } else {
+                throw new MiaoException("http-err-" + response.getCode());
             }
         } catch (Exception e) {
             throw new MiaoException(e);
@@ -72,24 +87,34 @@ public class HttpUtils {
                 throw new MiaoException(e);
             }
         }
-        return resultString;
+        return resultJson;
     }
 
     /**
      * 无参的post请求
      */
     public static String doPost(String url) throws MiaoException {
-        return doPost(url, null);
+        return doPost(url, (String) null);
     }
 
     /**
      * 有参的post请求
      */
     public static String doPost(String url, String params) throws MiaoException {
-        return _doPost(url, params);
+        return _doPost(url, params, ContentType.APPLICATION_JSON);
     }
 
-    private static String _doPost(String url, String params) throws MiaoException {
+    /**
+     * 有参的post请求-req形式
+     */
+    public static <T extends MiaoResponse> T doPost(String url, MiaoRequest<T> request) throws MiaoException {
+        log.info(JSONObject.toJSONString(request));
+        String responseJson = _doPost(url, JSONObject.toJSONString(request), ContentType.APPLICATION_JSON);
+        log.info(responseJson);
+        return JSONObject.parseObject(responseJson, request.getResponseClass());
+    }
+
+    private static String _doPost(String url, String params, ContentType contentType) throws MiaoException {
         // 创建Httpclient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
@@ -99,7 +124,7 @@ public class HttpUtils {
             HttpPost httpPost = new HttpPost(url);
             // 创建参数列表
             if (params != null) {
-                StringEntity entity = new StringEntity(params, ContentType.APPLICATION_JSON);
+                StringEntity entity = new StringEntity(params, contentType);
                 httpPost.setEntity(entity);
             }
             // 执行http请求

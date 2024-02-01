@@ -3,182 +3,62 @@ package com.miao.robot.ding.request;
 import com.miao.robot.ding.response.DingResponse;
 import com.miao.robot.request.MiaoRequest;
 import com.miao.robot.lang.MiaoObject;
+import lombok.Data;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
+@Data
 public class DingRequest extends MiaoRequest<DingResponse> {
 
     // body
+    // 消息类型 text-文本消息 picture-图片消息 richText-富文本消息 audio-语音 video-视频消息 file-文件消息 required
+    // 目前支持 text
     private String msgtype;
-    private Text text;
-    private String msgId;
-    private String createAt;
-    private String conversationType;
-    private String conversationId;
-    private String conversationTitle;
-    private String senderId;
-    private String senderNick;
-    private String senderCorpId;
-    private String senderStaffId;
-    private String chatbotUserId;
-    private ArrayList<AtUser> atUsers;
+    private Text text; // 文本消息内容
+    private Content content; // 消息内容
+    private String msgId; // 加密的消息ID，暂无使用场景，可忽略 required
+    private String createAt; // 消息的时间戳，单位毫秒 required
+    private String conversationType; // 1-单聊 2-群聊 required
+    private String conversationId; // 会话ID required
+    private String conversationTitle; // 群聊时才有的会话标题
+    private String senderId; // 加密的发送者ID 使用senderStaffId，作为发送者userid值 required
+    private String senderNick; // 发送者昵称 required
+    private String senderCorpId; // 企业内部群有的发送者当前群的企业corpId
+    private String senderStaffId; // 企业内部群中@该机器人的成员userid 该字段在机器人发布线上版本后，才会返回
+    private String sessionWebhook; // 当前会话的Webhook地址 required
+    private Long sessionWebhookExpiredTime; // 当前会话的Webhook地址过期时间 required
+    private boolean isAdmin; // 是否为管理员 机器人发布上线后生效
+    private String chatbotCorpId; // 机器人所在的企业corpId
+    private boolean isInAtList; // 是否在@列表中
+    private String chatbotUserId; // 加密的机器人ID，暂无使用场景，可忽略
+    private ArrayList<AtUser> atUsers; // 被@人的信息
 
     // header
     private String sign;
-
-    public String getMsgtype() {
-        return msgtype;
-    }
-
-    public void setMsgtype(String msgtype) {
-        this.msgtype = msgtype;
-    }
-
-    public Text getText() {
-        return text;
-    }
-
-//    public void setText(String text) {
-//        DingRequest.Text textClass = new DingRequest.Text();
-//        textClass.setContent(text);
-//        this.text = textClass;
-//    }
-
-    public void setText(Text text) {
-        this.text = text;
-    }
-
-    public String getMsgId() {
-        return msgId;
-    }
-
-    public void setMsgId(String msgId) {
-        this.msgId = msgId;
-    }
-
-    public String getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt;
-    }
-
-    public String getConversationType() {
-        return conversationType;
-    }
-
-    public void setConversationType(String conversationType) {
-        this.conversationType = conversationType;
-    }
-
-    public String getConversationId() {
-        return conversationId;
-    }
-
-    public void setConversationId(String conversationId) {
-        this.conversationId = conversationId;
-    }
-
-    public String getConversationTitle() {
-        return conversationTitle;
-    }
-
-    public void setConversationTitle(String conversationTitle) {
-        this.conversationTitle = conversationTitle;
-    }
-
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
-    }
-
-    public String getSenderNick() {
-        return senderNick;
-    }
-
-    public void setSenderNick(String senderNick) {
-        this.senderNick = senderNick;
-    }
-
-    public String getSenderCorpId() {
-        return senderCorpId;
-    }
-
-    public void setSenderCorpId(String senderCorpId) {
-        this.senderCorpId = senderCorpId;
-    }
-
-    public String getSenderStaffId() {
-        return senderStaffId;
-    }
-
-    public void setSenderStaffId(String senderStaffId) {
-        this.senderStaffId = senderStaffId;
-    }
-
-    public String getChatbotUserId() {
-        return chatbotUserId;
-    }
-
-    public void setChatbotUserId(String chatbotUserId) {
-        this.chatbotUserId = chatbotUserId;
-    }
-
-    public ArrayList<AtUser> getAtUsers() {
-        return atUsers;
-    }
-
-    public void setAtUsers(ArrayList<AtUser> atUsers) {
-        this.atUsers = atUsers;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
 
     @Override
     public Class<DingResponse> getResponseClass() {
         return DingResponse.class;
     }
 
+    @Data
     public static class Text extends MiaoObject {
-        private String content;
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
+        private String content; // 文本
     }
 
+    @Data
+    public static class Content extends MiaoObject {
+        private String downloadCode; // 各种类型的下载代码
+        private String fileName; // 文件名
+        private String duration;
+        private String videoType; // 视频格式
+        private String recognition;
+    }
+
+    @Data
     public static class AtUser extends MiaoObject {
-        private String dingtalkId;
-        private String staffId;
-
-        public String getDingtalkId() {
-            return dingtalkId;
-        }
-
-        public void setDingtalkId(String dingtalkId) {
-            this.dingtalkId = dingtalkId;
-        }
-
-        public String getStaffId() {
-            return staffId;
-        }
-
-        public void setStaffId(String staffId) {
-            this.staffId = staffId;
-        }
+        private String dingtalkId; // 加密的发送者ID
+        private String staffId; // 企业内部群有的发送者在企业内的userid
     }
 }

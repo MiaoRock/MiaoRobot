@@ -1,19 +1,22 @@
 package com.miao.robot.ding.service;
 
 import com.miao.robot.Exception.IllegalMiaoException;
-import com.miao.robot.Exception.MiaoException;
 import com.miao.robot.ding.request.DingRequest;
 import com.miao.robot.lang.Encoder;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 
 @Slf4j
+@Data
 @Service
+@ConfigurationProperties(prefix = "ding.check")
 public class CheckDing {
 
-    private String secret = "olQPKLwtpR8dvPMRe0gEsy-YzZX9QOb-dvSNs0kPeM2sdEV7PtdnoEfHx7-KpEGs";
+    private String secret;
 
     public boolean execute(DingRequest dingRequest) {
         try {
@@ -29,6 +32,7 @@ public class CheckDing {
     public void checkTimestamp(long timestamp) throws IllegalMiaoException {
         Calendar calendar = Calendar.getInstance();
         long currentTimeMillis = calendar.getTimeInMillis();
+        log.info("[" + currentTimeMillis + "][" + timestamp + "]");
         if (Math.abs(currentTimeMillis - timestamp) > 1000 * 60 * 60) { // 1小时内
             throw new IllegalMiaoException("IllegalTimestampRequest", "请求timestamp值非法");
         }

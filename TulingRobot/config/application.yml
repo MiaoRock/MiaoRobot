@@ -1,0 +1,28 @@
+#server
+server:
+#  address: 127.0.0.1
+  port: 5900
+spring:
+  application:
+    name: tuling
+#tuling
+tuling:
+  url: http://openapi.tuling123.com/openapi/api/v2
+  apkKey: XXX
+  userId: XXX
+#eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1900/eureka/
+#log
+logging:
+  level:
+    root: INFO
+    com.miao.robot: DEBUG
+    org.springframework.web: ERROR
+  file:
+    name: ./logs/Tuling.log
+  pattern:
+    console: "[%d{yyyy/MM/dd-HH:mm:ss.SSS}][%-5p]%m[%c.%M:%L]%n"
+    file: "[%d{yyyy/MM/dd-HH:mm:ss.SSS}][%-5p]%m[%c.%M:%L]%n"
