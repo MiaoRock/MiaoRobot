@@ -19,8 +19,8 @@ public class ChatgptRobotController {
     private ChatgptClient client;
 
     @ResponseBody
-    @PostMapping(value = "/tuling")
-    public DefaultMiaoResponse TulingRobot(@RequestHeaderAndBody DefaultMiaoRequest request) {
+    @PostMapping(value = "/chatgpt")
+    public DefaultMiaoResponse chatGPT(@RequestHeaderAndBody DefaultMiaoRequest request) {
         return client.execute(request);
     }
 }
