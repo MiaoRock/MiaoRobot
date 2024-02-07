@@ -5,11 +5,12 @@ server:
 spring:
   application:
     name: chatgpt
-#tuling
+#chatgpt
 chatgpt:
-  url: XXX
-  apkKey: XXX
-  userId: XXX
+  url: "https://api.nextapi.fun"
+  keys:
+    list:
+      - "ak-cfkAcHZHPVRHurSHhNc0bm8GxmjCJYFkh3AiA0Wx9Jmt7ijP"
 #eureka
 eureka:
   client:
