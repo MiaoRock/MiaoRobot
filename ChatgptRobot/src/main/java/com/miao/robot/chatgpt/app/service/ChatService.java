@@ -1,7 +1,7 @@
 package com.miao.robot.chatgpt.app.service;
 
 import com.miao.robot.chatgpt.entity.ChatParam;
-import com.miao.robot.chatgpt.entity.Result;
+import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
 
 /**
  * 功能描述：
@@ -15,8 +15,7 @@ public interface ChatService {
     /**
      * 对话
      * @param param
-     * @param balance
      * @return
      */
-    Result chat(ChatParam param, String balance);
+    ChatCompletionResponse chat(ChatParam param);
 }

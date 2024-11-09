@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/robot")
 public class ChatgptRobotController {
-    @Autowired
+
     private ChatgptClient client;
+
+    public ChatgptRobotController(ChatgptClient client) {
+        this.client = client;
+    }
 
     @ResponseBody
     @PostMapping(value = "/chatgpt")

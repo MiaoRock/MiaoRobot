@@ -3,7 +3,6 @@ package com.miao.robot.chatgpt.app.service;
 import com.miao.robot.chatgpt.config.KeyConfig;
 import com.miao.robot.chatgpt.utils.CircularBlockQueueUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,20 @@ import java.util.List;
 @Service
 public class KeyManager implements ApplicationRunner {
     private static CircularBlockQueueUtil<String> keyQueue = new CircularBlockQueueUtil<>();
-    @Autowired
-    KeyConfig keyConfig;
+    private final KeyConfig keyConfig;
+
+    public KeyManager(KeyConfig keyConfig) {
+        this.keyConfig = keyConfig;
+    }
 
     public synchronized String getKey() {
         return keyQueue.next();
     }
+
+    public synchronized String getSingleKey() {
+        return keyQueue.peek();
+    }
+
 
     @Override
     public void run(ApplicationArguments args) {
@@ -35,13 +42,12 @@ public class KeyManager implements ApplicationRunner {
             log.info("开始配置KEY队列");
             List<String> list = keyConfig.getList();
             int size = list.size();
-            log.info("找到" + size + "个配置的KEY");
+            log.info("找到{}个配置的KEY", size);
             for (String key : list) {
                 keyQueue.add(key);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

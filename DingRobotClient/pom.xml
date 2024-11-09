@@ -19,6 +19,8 @@
             <groupId>com.dingtalk.open</groupId>
             <artifactId>taobao-sdk-java-auto</artifactId>
             <version>1479188381469-20200709</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto-1479188381469-20200709.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -1,5 +1,6 @@
 package com.miao.robot.chatgpt.client;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.miao.robot.Exception.MiaoException;
 import com.miao.robot.Exception.ResponseMiaoException;
 import com.miao.robot.chatgpt.app.service.ChatService;
@@ -11,46 +12,55 @@ import com.miao.robot.request.DefaultMiaoRequest;
 import com.miao.robot.request.MiaoRequest;
 import com.miao.robot.response.DefaultMiaoResponse;
 import com.miao.robot.response.MiaoResponse;
-import com.miao.robot.chatgpt.request.ChatgptRequest;
 import com.miao.robot.utils.HttpUtils;
+import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
+import com.plexpt.chatgpt.entity.chat.Message;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Data
 @Service
 public class ChatgptClient extends MiaoClient {
 
-    @Autowired
-    ChatService chatService;
-
-    @Autowired
-    KeyManager keyManager;
     @Value("${chatgpt.url}")
     private String url;
-    private static final String TEXT = "text";
+    @Value("${chatgpt.model}")
+    private String model;
+    private final String TEXT = "text";
+    private final ChatService chatService;
+    private final KeyManager keyManager;
+    private List<Message> messages = new ArrayList<>();
+
+    public ChatgptClient(ChatService chatService, KeyManager keyManager) {
+        this.chatService = chatService;
+        this.keyManager = keyManager;
+    }
 
     public DefaultMiaoResponse execute(DefaultMiaoRequest request) {
         DefaultMiaoResponse response = new DefaultMiaoResponse();
-        ChatParam chatParam = new ChatParam();
+        Message message = new Message("user", request.getText());
+        messages.add(message);
+        ChatParam chatParam = new ChatParam(messages);
+        chatParam.setApiKey(keyManager.getSingleKey());
+        chatParam.setModel(model);
+        chatParam.setApiHost(url);
+        chatParam.setMax_tokens(1000);
+        chatParam.setTemperature(0.00);
         try {
-
             String type = request.getType();
             switch (type) {
                 case TEXT:
-                    String text = request.getText();
-                    chatParam.setMessage(text);
-                    chatParam.setKey(keyManager.getKey());
-                    chatParam.setUrl(url);
-                    Result result = chatService.chat(chatParam, "");
-                    response.setText(result.getMsg());
+                    ChatCompletionResponse chatCompletionResponse = chatService.chat(chatParam);
+                    log.info("chatgpt返回结果: {}", JSONObject.toJSONString(chatCompletionResponse));
+                    response.setText(chatCompletionResponse.getChoices().get(0).getMessage().getContent());
                     break;
                 default:
                     response.setType(TEXT);
@@ -61,6 +71,7 @@ public class ChatgptClient extends MiaoClient {
             log.error(e.getMessage());
             response.setType(TEXT);
             response.setText("Miao异常-" + e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }

@@ -5,12 +5,20 @@ server:
 spring:
   application:
     name: chatgpt
+#proxy
+proxy:
+  enable: false
+  type: http
+  host: 127.0.0.1
+  port: 7890
 #chatgpt
 chatgpt:
-  url: "https://api.nextapi.fun"
+  url: "https://api.nextapi.fun/"
+  model: "gpt-3.5-turbo"
   keys:
     list:
       - "ak-cfkAcHZHPVRHurSHhNc0bm8GxmjCJYFkh3AiA0Wx9Jmt7ijP"
+
 #eureka
 eureka:
   client:
