@@ -1,0 +1,37 @@
+#server
+server:
+#  address: 127.0.0.1
+  port: 7900
+spring:
+  application:
+    name: chatgpt
+#proxy
+proxy:
+  enable: false
+  type: http
+  host: 127.0.0.1
+  port: 7890
+#chatgpt
+chatgpt:
+  url: "https://api.nextapi.fun/"
+  model: "gpt-3.5-turbo"
+  keys:
+    list:
+      - "ak-cfkAcHZHPVRHurSHhNc0bm8GxmjCJYFkh3AiA0Wx9Jmt7ijP"
+
+#eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1900/eureka/
+#log
+logging:
+  level:
+    root: INFO
+    com.miao.robot: DEBUG
+    org.springframework.web: ERROR
+  file:
+    name: ./logs/Chatgpt.log
+  pattern:
+    console: "[%d{yyyy/MM/dd-HH:mm:ss.SSS}][%-5p]%m[%c.%M:%L]%n"
+    file: "[%d{yyyy/MM/dd-HH:mm:ss.SSS}][%-5p]%m[%c.%M:%L]%n"

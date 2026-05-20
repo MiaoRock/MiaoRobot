@@ -25,8 +25,7 @@ public class QuickResponse {
                     break;
                 }
             }
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
